@@ -23,42 +23,38 @@ public class Main {
         System.out.println(Arrays.toString(graph_34(graph2, 1, 6)));
     }
 
+    static List<Integer> result;
+    static boolean[] visited;
+    static ArrayList<Integer>[] adjList;
+
     public static int[] graph_34 (int[][] graph, int start, int n) {
-        List<Integer> result = new ArrayList<>();
+        result = new ArrayList<>();
 
-        Stack<Integer> stack = new Stack<>();
-        boolean[] visited = new boolean[n+1];
+//        Stack<Integer> stack = new Stack<>();
 
-        ArrayList<Integer>[] adjList = new ArrayList[n+1];
+        adjList = new ArrayList[n+1];
         for (int i=1; i<n+1; i++) {
             adjList[i] = new ArrayList<>();
         }
 
         for (int[] i : graph) {
             adjList[i[0]].add(i[1]);
-            adjList[i[1]].add(i[0]);
+//            adjList[i[1]].add(i[0]);
         }
-        System.out.println(Arrays.toString(Arrays.stream(adjList).toArray()));
 
-        stack.push(start);
-        visited[start] = true;
-
-        while (!stack.isEmpty()) {
-            int ptr = stack.pop();
-
-            System.out.print(ptr + " -> ");
-
-            for (int i= adjList[ptr].size()-1; i>=0; i--) {
-                Integer cur = adjList[ptr].get(i);
-                if (!visited[cur]) {
-                    stack.push(cur);
-                    visited[cur] = true;
-                }
-            }
-
-            result.add(ptr);
-        }
+        visited = new boolean[n+1];
+        dfs(start);
 
         return result.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    private static void dfs(int node) {
+        visited[node] = true;
+        result.add(node);
+
+        for (int next : adjList[node]) {
+            if (!visited[next])
+                dfs(next);
+        }
     }
 }
