@@ -8,8 +8,10 @@ public class CountingSort_50 {
 
     public static void main(String[] args) {
 //        System.out.println(solution("dcba"));
-        System.out.println(solution("hello"));
-        System.out.println(solution("algorithm"));
+//        System.out.println(solution("hello"));
+//        System.out.println(solution("algorithm"));
+
+        System.out.println(real_solution("hello"));
     }
 
     /*
@@ -67,5 +69,23 @@ public class CountingSort_50 {
 
     private static char getAlphabet(int ascii) {
         return (char) (ascii + 97);
+    }
+
+    private static String real_solution(String s) {
+        int[] counts = new int[26];
+
+        for (char c: s.toCharArray()) {
+            counts[c - 'a']++;
+        }
+//        System.out.println(Arrays.toString(counts));
+
+        StringBuilder sortedStr = new StringBuilder();
+        for (int i=0; i<26; i++) {
+            for (int j=0; j<counts[i]; j++) {
+                sortedStr.append((char) (i+'a'));
+            }
+        }
+
+        return sortedStr.toString();
     }
 }
