@@ -19,38 +19,18 @@ public class MergeSort_51 {
         이미 정렬이 완료되어 있는 두 배열을 받아 병합 정렬 하시오.
      */
     private static int[] solution(int[] arr1, int[] arr2) {
-        int size = arr1.length + arr2.length;
-        int[] result = new int[size];
-        int idx = 0;
+        int[] result = new int[arr1.length + arr2.length];
+        int k = 0, i = 0, j = 0;
 
-        // 각 배열을 가리켜야 한다. 그 로직은?
-        int idx1 = 0;
-        int idx2 = 0;
-
-        int cur1 = arr1[idx1];
-        int cur2 = arr2[idx2];
-
-        while(idx1 != arr1.length && idx2 != arr2.length) {
-
-            if (cur1 <= cur2) {
-                result[idx++] = cur1;
-                idx1++;
-                if (idx1 < arr1.length) cur1 = arr1[idx1];
-            } else {
-                result[idx++] = cur2;
-                idx2++;
-                if (idx2 < arr2.length) cur2 = arr2[idx2];
-            }
-
+        while(i < arr1.length && j < arr2.length) {
+            result[k++] = arr1[i] < arr2[j] ? arr1[i++] : arr2[j++];
         }
 
-        while (idx1 < arr1.length) {
-            result[idx++] = arr1[idx1];
-            idx1++;
+        while (i < arr1.length) {
+            result[k++] = arr1[i++];
         }
-        while (idx2 < arr2.length) {
-            result[idx++] = arr2[idx2];
-            idx2++;
+        while (j < arr2.length) {
+            result[k++] = arr2[j++];
         }
 
         return result;
