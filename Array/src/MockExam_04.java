@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MockExam_04 {
@@ -6,10 +7,6 @@ public class MockExam_04 {
         int[] answers = {1, 3, 2, 4, 2};
         System.out.println(Arrays.toString(solution(answers)));
     }
-
-    private static final int[] studentA = {1, 2, 3, 4, 5};
-    private static final int[] studentB = {2, 1, 2, 3, 2, 4, 2, 5};
-    private static final int[] studentC = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
 
     /*
     수포자는 수학을 포기한 사람을 줄인 표현이다.
@@ -29,34 +26,30 @@ public class MockExam_04 {
     - 가장 높은 점수를 받은 사람이 여럿이라면 반환하는 값을 오름차순으로 정렬하라.
      */
     private static int[] solution(int[] answers) {
-        int a = 0, b = 0, c = 0;
-        int cntA = 0, cntB = 0, cntC = 0;
 
-        for (int answer : answers) {
-            if (studentA[a++] == answer) cntA ++;
-            if (a == studentA.length) a = 0;
+        int[][] patterns = {
+                {1, 2, 3, 4, 5},
+                {2, 1, 2, 3, 2, 4, 2, 5},
+                {3, 3, 1, 1, 2, 2, 4, 4, 5, 5}
+        };
 
-            if (studentB[b++] == answer) cntB ++;
-            if (b == studentB.length) b = 0;
+        int[] scores = new int[3];
 
-            if (studentC[c++] == answer) cntC ++;
-            if (c == studentC.length) c = 0;
+        for (int i=0; i<answers.length; i++) {
+            for (int j=0; j< patterns.length; j++) {
+                if (answers[i] == patterns[j][i % patterns[j].length]) scores[j] ++;
+            }
         }
 
-        if (cntA == cntB && cntA == cntC) return new int[] {1, 2, 3};
+        int maxScore = Arrays.stream(scores).max().getAsInt();
 
-        if (cntA > cntB) {
-            if (cntA > cntC) return new int[] {1};
-            if (cntA == cntC) return new int[] {1, 3};
-            return new int[] {3};
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i=0; i<scores.length; i++) {
+            if (scores[i] == maxScore) {
+                result.add(i+1);
+            }
         }
 
-        if (cntB > cntA) {
-            if (cntB > cntC) return new int[] {2};
-            if (cntB == cntC) return new int[] {2, 3};
-            return new int[] {3};
-        }
-
-        return null;
+        return result.stream().mapToInt(Integer::intValue).toArray();
     }
 }
