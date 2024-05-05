@@ -1,5 +1,4 @@
-import java.util.Arrays;
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 public class rotationBracket_10 {
     public static void main(String[] args) {
@@ -7,8 +6,6 @@ public class rotationBracket_10 {
         System.out.println(solution("}]()[{"));
     }
 
-
-    private static String[] brackets = null;
     /*
     다음 규칙을 지키는 문자열을 올바른 괄호 문자열이라고 정의합니다.
 
@@ -27,51 +24,51 @@ public class rotationBracket_10 {
     private static int solution(String s) {
         // s를 저장할 배열 및 result count 저장할 변수 생성
         int resultCnt = 0;
-        brackets = s.split("");
 
 //        System.out.println(Arrays.toString(brackets));
 
         // 회전을 배열을 직접하지 않고 시작 idx, 끝내는 idx 로 대체할 변수 설정
         int startIdx = 0;
-        if (isMatch(startIdx)) resultCnt ++;
+        if (isMatch(startIdx, s)) resultCnt ++;
 
-        for (int i=0; i< brackets.length-1; i++) {
-            if (isMatch((++startIdx)% brackets.length)) resultCnt ++;
+        for (int i=0; i< s.length()-1; i++) {
+            if (isMatch((++startIdx) % s.length(), s)) resultCnt ++;
         }
 
         // 위치 회전하기
         return resultCnt;
     }
 
-    private static boolean isMatch(int startIdx) {
+    private static boolean isMatch(int startIdx, String s) {
         // Stack 생성
-        Stack<String> stack = new Stack<>();
+        ArrayDeque<Character> stack = new ArrayDeque<>();
 
         int currentIdx = startIdx;
         // Stack 에 넣어가면서 짝이 맞는지 확인
-        for (int i=0; i<brackets.length; i++) {
+        for (int i=0; i< s.length(); i++) {
 //            System.out.print("currentIdx : " + currentIdx + " ");
+            Character curCh = s.charAt(currentIdx);
 
-            if (!stack.isEmpty() && isMatch(stack.peek(), brackets[currentIdx])) {
+            if (!stack.isEmpty() && isMatch(stack.peek(), curCh)) {
                 stack.pop();
             } else {
-                stack.push(brackets[currentIdx]);
+                stack.push(curCh);
             }
 
 //            System.out.println(stack);
 
             currentIdx ++;
-            currentIdx %= brackets.length;
+            currentIdx %= s.length();
         }
 
 //        System.out.println(stack);
         return stack.isEmpty();
     }
 
-    private static boolean isMatch(String popStack, String str) {
-        if (popStack.equals("(") && str.equals(")")) return true;
-        if (popStack.equals("[") && str.equals("]")) return true;
-        if (popStack.equals("{") && str.equals("}")) return true;
+    private static boolean isMatch(Character popStack, Character ch) {
+        if (popStack == '(' && ch == ')') return true;
+        if (popStack == '[' && ch == ']') return true;
+        if (popStack == '{' && ch == '}') return true;
 
         return false;
     }
