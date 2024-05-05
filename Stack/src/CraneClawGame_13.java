@@ -1,5 +1,4 @@
 import java.util.ArrayDeque;
-import java.util.HashMap;
 
 public class CraneClawGame_13 {
     public static void main(String[] args) {
@@ -17,27 +16,20 @@ public class CraneClawGame_13 {
     private static int solution(int[][] board, int[] moves) {
         int answer = 0;
 
-        HashMap<Integer, ArrayDeque<Integer>> stackBoard = new HashMap<>();
-
-        int n = board.length;
-        for (int i=0; i<n; i++) {
-            ArrayDeque<Integer> stack = new ArrayDeque<>();
-            for (int j=n-1; j>=0; j--) {
-                if (board[j][i] != 0) stack.push(board[j][i]);
-            }
-            stackBoard.put(i+1, stack);
-        }
-//        System.out.println(stackBoard);
-
         ArrayDeque<Integer> result = new ArrayDeque<>();
         for (int m : moves) {
-            if (!stackBoard.get(m).isEmpty()) {
-                int picked = stackBoard.get(m).pop();
-                if (!result.isEmpty() && result.peek() == picked) {
-                    result.pop();
-                    answer += 2;
-                } else {
-                    result.push(picked);
+            for (int j=0; j< board.length; j++) {
+                if (board[j][m-1] != 0) {
+                    if (!result.isEmpty() && result.peek() == board[j][m-1]) {
+                        result.pop();
+                        answer += 2;
+                    }
+                    else {
+                        result.push(board[j][m-1]);
+                    }
+                    board[j][m-1] = 0;
+
+                    break;
                 }
             }
         }
