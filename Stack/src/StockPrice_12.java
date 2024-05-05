@@ -15,34 +15,25 @@ public class StockPrice_12 {
     - prices 의 길이는 2 이상 100,000 이하 입니다.
      */
     private static int[] solution(int[] prices) {
-        int[] result = new int[prices.length];
+        int n = prices.length;
+        int[] answer = new int[n];
 
-        // Stack 생성
         ArrayDeque<Integer> stack = new ArrayDeque<>();
-        int idx = 0;
-        stack.push(idx);
+        stack.push(0);
 
-        while (++idx != prices.length) {
-            // 만약 stack 의 최상위 값이 더 작다면 push
-            if (!stack.isEmpty()) {
-                if (prices[stack.peek()] < prices[idx]) {
-                    stack.push(idx);
-                } else {
-                    while (!stack.isEmpty() && prices[stack.peek()] > prices[idx]) {
-                        int popIdx = stack.pop();
-                        result[popIdx] = idx - popIdx;
-                    }
-                    stack.push(idx);
-                }
+        for (int i = 1; i<n; i++) {
+            while (!stack.isEmpty() && prices[i] < prices[stack.peek()]) {
+                int j = stack.pop();
+                answer[j] = i - j;
             }
+            stack.push(i);
         }
-
 
         while (!stack.isEmpty()) {
-            int popIdx = stack.pop();
-            result[popIdx] = prices.length-1 - popIdx;
+            int j = stack.pop();
+            answer[j] = n - 1 - j;
         }
 
-        return result;
+        return answer;
     }
 }
