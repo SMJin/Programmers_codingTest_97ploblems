@@ -8,7 +8,9 @@ import java.util.HashSet;
 public class Main {
     public static void main(String[] args) {
 
-        int[] input_03 = {2,1,3,4,1};
+//        int[] input_03 = {2,1,3,4,1};
+//        int[] input_03 = {5, 0, 2, 7};
+        int[] input_03 = {0, 1, 3, 0, 8, 9, 8, 7, 1, 1, 2};
         System.out.println(Arrays.toString(array_03(input_03)));
     }
 
@@ -48,15 +50,14 @@ public class Main {
       - numbers의 길이는 2이상 100 이하
       - numbers의 모든 수는 0이상 100이하
      */
-    public static int[] array_03(int[] input) {
-        Arrays.sort(input);
-        ArrayList<Integer> newArray = new ArrayList<>();
-        for (int i=0; i<input.length; i++) {
-            for (int j=i+1; j <input.length; j++) {
-                newArray.add(input[i] + input[j]);
+    public static int[] array_03(int[] numbers) {
+        ArrayList<Integer> answer = new ArrayList<>();
+        for (int i=0; i<numbers.length; i++) {
+            for (int j=i+1; j <numbers.length; j++) {
+                answer.add(numbers[i] + numbers[j]);
             }
         }
-        return newArray.stream().distinct().mapToInt(Integer::intValue).toArray();
+        return answer.stream().sorted().distinct().mapToInt(Integer::intValue).toArray();
     }
     public static int[] array_03_answer(int[] input) {
         HashSet<Integer> set = new HashSet<>();
