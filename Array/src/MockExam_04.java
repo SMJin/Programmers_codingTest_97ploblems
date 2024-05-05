@@ -33,23 +33,34 @@ public class MockExam_04 {
                 {3, 3, 1, 1, 2, 2, 4, 4, 5, 5}
         };
 
-        int[] scores = new int[3];
+        int a = 0, b = 0, c = 0;
+        int cntA = 0, cntB = 0, cntC = 0;
 
-        for (int i=0; i<answers.length; i++) {
-            for (int j=0; j< patterns.length; j++) {
-                if (answers[i] == patterns[j][i % patterns[j].length]) scores[j] ++;
-            }
+        for (int answer : answers) {
+            if (patterns[0][a++] == answer) cntA ++;
+            if (a == patterns[0].length) a = 0;
+
+            if (patterns[1][b++] == answer) cntB ++;
+            if (b == patterns[1].length) b = 0;
+
+            if (patterns[2][c++] == answer) cntC ++;
+            if (c == patterns[2].length) c = 0;
         }
 
-        int maxScore = Arrays.stream(scores).max().getAsInt();
+        if (cntA == cntB && cntA == cntC) return new int[] {1, 2, 3};
 
-        ArrayList<Integer> result = new ArrayList<>();
-        for (int i=0; i<scores.length; i++) {
-            if (scores[i] == maxScore) {
-                result.add(i+1);
-            }
+        if (cntA > cntB) {
+            if (cntA > cntC) return new int[] {1};
+            if (cntA == cntC) return new int[] {1, 3};
+            return new int[] {3};
         }
 
-        return result.stream().mapToInt(Integer::intValue).toArray();
+        if (cntB > cntA) {
+            if (cntB > cntC) return new int[] {2};
+            if (cntB == cntC) return new int[] {2, 3};
+            return new int[] {3};
+        }
+
+        return new int[]{1, 2};
     }
 }
