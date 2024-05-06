@@ -64,11 +64,13 @@ public class Main {
     - target 은 1 이상 20,000 이하의 자연수입니다.
      */
     private static boolean makeNumber_18(int[] arr, int target) {
-        for (int i=0; i<arr.length; i++) {
-            for (int j=i+1; j<arr.length; j++) {
-                if (arr[i] + arr[j] == target) return true;
-            }
+        HashSet <Integer> set = new HashSet<>();
+
+        for (int a : arr) {
+            if (set.contains(target - a)) return true;
+            set.add(a);
         }
+
         return false;
     }
 }
