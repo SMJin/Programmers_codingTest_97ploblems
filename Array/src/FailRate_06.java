@@ -1,13 +1,17 @@
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class FailRate_06 {
     public static void main(String[] args) {
-        int N = 5;
-        int[] stages = {2, 1, 2, 6, 2, 4, 3, 3};
+//        int N = 5;
+//        int[] stages = {2, 1, 2, 6, 2, 4, 3, 3};
 
 //        int N = 4;
 //        int[] stages = {4, 4, 4, 4, 4};
+
+        int N = 3;
+        int[] stages = {2, 2, 1};
 
         System.out.println(Arrays.toString(solution(N, stages)));
     }
@@ -37,76 +41,57 @@ public class FailRate_06 {
     - 스테이지에 도달한 유저가 없는 경우 해당 스테이지의 실패율은 0으로 정의합니다.
      */
     private static int[] solution(int N, int[] stages) {
+        int peopleAmount = stages.length;
+        int stageAmount = N;
 
-        // 1. 스테이지별 도전자 수를 구함
-//        int[] numberOfStage = new int[N+1];
-//        for (int stage : stages) {
-//            if (stage < N+1) numberOfStage[stage] ++;
-//        }
-        int[] challenger = new int[N + 2];
-        for (int i=0; i< stages.length; i++) {
-            challenger[stages[i]] ++;
+        int[] numberOfStage = new int[stageAmount +1];
+        for (int stage : stages) {
+            if (stage < stageAmount+1) numberOfStage[stage] ++;
         }
 
-        String 스테이지별_도전자_수 = Arrays.stream(challenger)
-                .skip(1)
-                .mapToObj(String::valueOf)
-                .collect(Collectors.joining(", ", "1. 스테이지별 도전자 수를 구함\n[", "]"));
-//                .forEach(System.out::println);
-        System.out.println(스테이지별_도전자_수);
+        System.out.println(Arrays.toString(numberOfStage));
 
-        // 2. 스테이지별 실패한 사용자 수 계산
-//        int ppAmt = stages.length;
-//        ArrayList<FailRate> failRates = new ArrayList<>();
-//        for (int i=1; i<numberOfStage.length; i++) {
-//            failRates.add(new FailRate(i,numberOfStage[i]*1.0 / ppAmt));
-//            ppAmt -= numberOfStage[i];
-//        }
-
-        double total = stages.length;
-        HashMap<Integer, Double> fails = new HashMap<>();
-
-        // 3. 각 스테이지를 순회하며, 실패율 계산
-        for (int i=1; i<=N; i++) {
-            if (challenger[i] == 0) { // 4. 도전한 사람이 없는 경우, 실패율은 0
-                fails.put(i, 0.);
+        ArrayList<FailRate> failRates = new ArrayList<>();
+        for (int i=1; i<numberOfStage.length; i++) {
+            if (peopleAmount != 0) {
+                failRates.add(new FailRate(i, (double) numberOfStage[i] / peopleAmount));
+                peopleAmount -= numberOfStage[i];
             } else {
-                fails.put(i, challenger[i] / total); // 5. 실패율 구함
-                total -= challenger[i]; // 6. 다음 스테이지 실패율을 구하기 위해 현재 스테이지의 인원을 뺌
+                failRates.add(new FailRate(i, 0.0));
             }
         }
 
-        // 7. 실패율이 높은 스테이지부터 내림차순으로 정렬
-//        return failRates.stream()
-//                .sorted(Comparator.comparing(FailRate::getRate).reversed())
-//                .map(FailRate::getStgNum)
-//                .mapToInt(Double::intValue)
-//                .toArray();
-        return fails.entrySet().stream()
-                .sorted((o1, o2) -> Double.compare(o2.getValue(), o1.getValue()))
-                .mapToInt(HashMap.Entry::getKey).toArray();
+        System.out.println(failRates);
+
+//        int[] result = new int[N];
+
+        return failRates.stream()
+                .sorted(Comparator.comparing(FailRate::getRate).reversed().thenComparing(FailRate::getStgNum))
+                .map(FailRate::getStgNum)
+                .mapToInt(Double::intValue)
+                .toArray();
     }
 
-//    public static class FailRate {
-//        public FailRate(int stgNum, double rate) {
-//            this.stgNum = stgNum;
-//            this.rate = rate;
-//        }
-//
-//        private int stgNum;
-//        private double rate;
-//
-//        public double getStgNum() {
-//            return this.stgNum;
-//        }
-//
-//        public double getRate() {
-//            return this.rate;
-//        }
-//
-//        public String toString() {
-//            return "[stgNum = " + stgNum +
-//                    ", rate = " + rate + "]";
-//        }
-//    }
+    public static class FailRate {
+        public FailRate(int stgNum, double rate) {
+            this.stgNum = stgNum;
+            this.rate = rate;
+        }
+
+        private int stgNum;
+        private double rate;
+
+        public double getStgNum() {
+            return this.stgNum;
+        }
+
+        public double getRate() {
+            return this.rate;
+        }
+
+        public String toString() {
+            return "[stgNum = " + stgNum +
+                    ", rate = " + rate + "]";
+        }
+    }
 }
