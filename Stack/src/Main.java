@@ -6,13 +6,14 @@ import java.util.Stack;
 public class Main {
     public static void main(String[] args) {
 
-//        System.out.println("() : " + stack_08("()"));
-//        System.out.println("empty : " + stack_08(""));
-//        System.out.println("()) : " + stack_08("())"));
-//        System.out.println("( : " + stack_08("("));
-//        System.out.println("()() : " + stack_08("()()"));
-//        System.out.println(")()() : " + stack_08(")()()"));
-//        System.out.println("(()) : " + stack_08("(())")); // error
+        System.out.println("empty : " + stack_08(""));
+        System.out.println("() : " + stack_08("()"));
+        System.out.println("()) : " + stack_08("())"));
+        System.out.println("( : " + stack_08("("));
+        System.out.println("()() : " + stack_08("()()"));
+        System.out.println(")()() : " + stack_08(")()()"));
+        System.out.println("(())() : " + stack_08("(())()"));
+        System.out.println("(()) : " + stack_08("(())")); // error
 
 //        System.out.println("() : " + stack_08_2("()"));
 //        System.out.println("empty : " + stack_08_2(""));
@@ -34,11 +35,11 @@ public class Main {
 //        System.out.println("(()) : " + stack_08_solution("(())"));
 //        System.out.println("((()) : " + stack_08_solution("((())"));
 
-        System.out.println("2 : " + stack_09(2));
-        System.out.println("4 : " + stack_09(4));
-        System.out.println("10 : " + stack_09(10));
-        System.out.println("12 : " + stack_09(12));
-        System.out.println("3 : " + stack_09(3));
+//        System.out.println("2 : " + stack_09(2));
+//        System.out.println("4 : " + stack_09(4));
+//        System.out.println("10 : " + stack_09(10));
+//        System.out.println("12 : " + stack_09(12));
+//        System.out.println("3 : " + stack_09(3));
 
     }
 
@@ -49,57 +50,30 @@ public class Main {
         문자열 s의 길이: 100,000 이하의 자연수
         문자열 s는 '(' 또는 ')'로만 이루어져 있습니다.
      */
-    public static boolean stack_08(String input) {
-//        boolean answer = false;
-
+    public static boolean stack_08(String s) {
         // Stack 문제풀이 : 순서가 있다, 순서대로 요소를 빼낸다.
-
         Stack<Character> stack = new Stack<>();
-        if (input.isEmpty()) {
+        if (s.isEmpty()) {
             return true;
         }
-        if (input.charAt(input.length()-1) == '(') {
-            System.out.println("끝 ch 가 ( 열린결말입니다");
+
+        if (s.charAt(0) == ')') {
+//            System.out.println("empty 한데 ( 열린 시작이 아니라니!");
             return false;
         }
 
-        for (int i=0; i<input.length(); i++) {
-            char ch = input.charAt(i);
-
-            // 1. empty 일때
-            if (stack.isEmpty()) {
-                if (ch == '('){
-                    stack.push(ch);
-                } else {
-                    System.out.println("empty 한데 ( 열린 시작이 아니라니!");
-                    return false;
-                }
-            }
-
-            // 2. ( 로 끝날때
-            else if (stack.peek() == '(') {
-                if (ch == ')') {
-                    stack.push(ch);
-                } else {
-                    System.out.println("열었으면 닫아야지!");
-                    return false;
-                }
-            }
-
-            // 3. ) 로 끝날때
-            else if (stack.peek() == ')') {
-                if (ch == ')') {
-                    System.out.println("닫앗는데 왜 또 닫아!");
-                    return false;
-                } else {
-                    stack.pop();
-                }
-
-            }
+        if (s.charAt(s.length()-1) == '(') {
+//            System.out.println("끝 ch 가 ( 열린결말입니다");
+            return false;
         }
 
-        return true;
-//        return answer;
+        for (int i=0; i<s.length(); i++) {
+            char ch = s.charAt(i);
+            if (!stack.isEmpty() && ch == ')' && stack.peek() == '(') stack.pop();
+            else stack.push(ch);
+        }
+
+        return stack.isEmpty();
     }
 
     public static boolean stack_08_2(String input) {
