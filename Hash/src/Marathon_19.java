@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class Marathon_19 {
     /*
@@ -43,25 +41,13 @@ public class Marathon_19 {
 
         HashMap<String, Integer> participantMap = new HashMap<>();
 
+        for (String c : completion) participantMap.put(c, participantMap.getOrDefault(c, 0) + 1);
         for (String p : participant) {
-            if(participantMap.containsKey(p)) {
-                int cnt = participantMap.get(p);
-                participantMap.put(p, ++cnt);
-            } else {
-                participantMap.put(p, 1);
+            if (participantMap.getOrDefault(p, 0) == 0) {
+                System.out.println(p);
+                return;
             }
+            participantMap.put(p, participantMap.get(p) - 1);
         }
-
-        for (String c : completion) {
-            if (participantMap.get(c) == 1) {
-                participantMap.remove(c);
-            } else {
-                int cnt = participantMap.get(c);
-                participantMap.put(c, --cnt);
-            }
-        }
-
-        String[] answer = participantMap.keySet().toArray(new String[0]);
-        System.out.println(answer[0]);
     }
 }
